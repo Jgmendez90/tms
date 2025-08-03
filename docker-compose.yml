@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   laravel.test:
     build:
@@ -9,8 +11,8 @@ services:
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     ports:
-      - APP_PORT=8080
-      - VITE_PORT=5173
+      - '${APP_PORT:-8080}:80'
+      - '${VITE_PORT:-5173}:5173'
     environment:
       WWWUSER: '${WWWUSER}'
       LARAVEL_SAIL: 1
@@ -27,7 +29,7 @@ services:
   mysql:
     image: mysql:8.0
     ports:
-      - '3307:3306'  # El host usa 3307, contenedor sigue en 3306
+      - '3307:3306'
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: transportation_management_system
@@ -38,10 +40,9 @@ services:
     networks:
       - sail
 
+volumes:
+  sail-mysql:
+
 networks:
   sail:
     driver: bridge
-
-volumes:
-  sail-mysql:
-    driver: local
